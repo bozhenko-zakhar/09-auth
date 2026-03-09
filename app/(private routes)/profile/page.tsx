@@ -13,7 +13,7 @@ const Profile = () => {
 				</div>
 				<div className={css.avatarWrapper}>
 					<Image
-						// src="Avatar"
+						src="Avatar"
 						alt="User Avatar"
 						width={120}
 						height={120}

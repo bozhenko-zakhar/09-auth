@@ -28,8 +28,6 @@ const SignIn = () => {
       }
     } catch (error) {
       setError(
-        error.response?.data?.error ??
-          error.message ??
           'Oops... some error'
       )
     }

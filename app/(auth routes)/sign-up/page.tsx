@@ -29,8 +29,6 @@ const SignUp = () => {
     } catch (error) {
 			console.log(1)
       setError(
-        error.response?.data?.error ??
-          error.message ??
           'Oops... some error'
       )
     }
