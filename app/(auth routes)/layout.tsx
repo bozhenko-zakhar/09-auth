@@ -1,10 +1,12 @@
 // import css from "./layout.module.css"
 
-export default function RootLayout({
+type Props = {
+  children: React.ReactNode;
+};
+
+export default function AuthLayout({
 	children
-}: Readonly<{
-	children: React.ReactNode
-}>) {
+}: Props) {
 	return <div>
 		{children}
 	</div>

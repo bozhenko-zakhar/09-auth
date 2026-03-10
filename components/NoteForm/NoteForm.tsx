@@ -6,7 +6,7 @@ import css from './NoteForm.module.css'
 // import {Formik, Form, Field, ErrorMessage, type FormikHelpers} from "formik"
 import type { NewNote, Note, NoteTag } from '../../types/note'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createNote } from '../../lib/api'
+import { createNote } from '../../lib/api/clientApi'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { useDraftStore } from '@/lib/store/noteStore'
