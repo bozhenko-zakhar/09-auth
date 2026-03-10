@@ -1,8 +1,28 @@
+"use client"
+
 import Link from "next/link"
 import css from "./AuthNavigation.module.css"
+import { useAuthStore } from "@/lib/store/authStore";
+import { useRouter } from "next/navigation";
+import { logout } from "@/lib/api/clientApi";
 
 const AuthNavigation = () => {
-	return (
+  const router = useRouter();
+  const { isAuthenticated, user } = useAuthStore();
+  const clearIsAuthenticated = useAuthStore(
+    (state) => state.clearIsAuthenticated,
+  );
+
+  const handleLogout = async () => {
+    // Викликаємо logout
+    await logout();
+    // Чистимо глобальний стан
+    clearIsAuthenticated();
+    // Виконуємо навігацію на сторінку авторизації
+    router.push('/sign-in');
+  };
+
+	return isAuthenticated ? (
 		<>
 			<li className={css.navigationItem}>
 				<Link href="/profile" prefetch={false} className={css.navigationLink}>
@@ -11,12 +31,14 @@ const AuthNavigation = () => {
 			</li>
 
 			<li className={css.navigationItem}>
-				<p className={css.userEmail}>User email</p>
-				<button className={css.logoutButton}>
+				<p className={css.userEmail}>{user?.email}</p>
+				<button onClick={handleLogout} className={css.logoutButton}>
 					Logout
 				</button>
 			</li>
-
+		</>
+	) : (
+		<>
 			<li className={css.navigationItem}>
 				<Link href="/sign-in" prefetch={false} className={css.navigationLink}>
 					Login

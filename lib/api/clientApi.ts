@@ -35,7 +35,7 @@ interface DeleteNoteParams {
 export type RegisterRequest = {
   email: string;
   password: string;
-  userName: string;
+  username: string;
 };
 
 export type LoginRequest = {
@@ -119,7 +119,7 @@ export const register = async (data: RegisterRequest): Promise<User> => {
   return res.data;
 };
 
-export const login = async (data: LoginRequest) => {
+export const login = async (data: LoginRequest): Promise<User> => {
   const res = await nextServer.post<User>('/auth/login', data);
   return res.data;
 };
@@ -128,12 +128,12 @@ export const logout = async (): Promise<void> => {
   await nextServer.post('/auth/logout')
 };
 
-export const checkSession = async () => {
+export const checkSession = async (): Promise<CheckSessionRequest> => {
   const res = await nextServer.get<CheckSessionRequest>('/auth/session');
-  return res.data.success;
+  return res.data;
 };
 
-export const getMe = async () => {
-  const { data } = await nextServer.get<User>('/auth/me');
+export const getMe = async (): Promise<User> => {
+  const { data } = await nextServer.get<User>('/users/me');
   return data;
 };
