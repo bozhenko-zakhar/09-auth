@@ -5,6 +5,7 @@ import css from "./page.module.css"
 import { useState } from "react";
 import { login, LoginRequest } from "@/lib/api/clientApi";
 import { useAuthStore } from "@/lib/store/authStore";
+import { ApiError } from "@/app/api/api";
 
 const SignIn = () => {
   const router = useRouter();
@@ -27,8 +28,8 @@ const SignIn = () => {
       }
     } catch (error) {
       setError(
-        error.response?.data?.error ?? // (error as ApiError)
-          error.message ?? // (error as ApiError)
+        (error as ApiError).response?.data?.error ??
+          (error as ApiError).message ??
           'Oops... some error'
       )
     }
