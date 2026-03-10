@@ -5,6 +5,7 @@ import css from "./page.module.css"
 import { useState } from "react";
 import { register, RegisterRequest } from "@/lib/api/clientApi";
 import { useAuthStore } from "@/lib/store/authStore";
+import { ApiError } from "@/app/api/api";
 
 const SignUp = () => {
   const router = useRouter();
@@ -27,8 +28,8 @@ const SignUp = () => {
       }
     } catch (error) {
       setError(
-        error.response?.data?.error ?? // (error as ApiError)
-          error.message ?? // (error as ApiError)
+        (error as ApiError).response?.data?.error ?? // (error as ApiError)
+          (error as ApiError).message ?? // (error as ApiError)
           'Oops... some error'
       )
     }
