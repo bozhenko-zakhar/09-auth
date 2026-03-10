@@ -115,7 +115,6 @@ export async function deleteNote({currentId}: DeleteNoteParams): Promise<Note> {
 }
 
 export const register = async (data: RegisterRequest): Promise<User> => {
-	console.log("back: ", data)
   const res = await nextServer.post<User>('/auth/register', data);
   return res.data;
 };
