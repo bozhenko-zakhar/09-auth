@@ -1,14 +1,13 @@
+// import css from "./layout.module.css"
+
 type Props = {
   children: React.ReactNode;
-  // sidebar: React.ReactNode;
 };
 
-const AuthLayout = ({ children/*, sidebar*/ }: Props) => {
-  return (
-    <section style={{backgroundColor: "aqua"}}>
-			{children}
-    </section>
-  );
-};
-
-export default AuthLayout;
+export default function AuthLayout({
+	children
+}: Props) {
+	return <div>
+		{children}
+	</div>
+}

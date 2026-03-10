@@ -12,7 +12,7 @@ import Loader from '@/components/Loader/Loader';
 import css from "./Notes.client.module.css"
 
 import { Toaster } from 'react-hot-toast';
-import { fetchNotes, fetchNotesByCategory } from '@/lib/api/clientApi';
+import { fetchNotes, fetchNotesByCategory } from '@/lib/api';
 import { NoteTag } from '@/types/note';
 import Link from 'next/link';
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Image from "next/image";
 import css from "./page.module.css"
 
@@ -5,20 +6,20 @@ const Profile = () => {
 	return (
 		<main className={css.mainContent}>
 			<div className={css.profileCard}>
-					<div className={css.header}>
+				<div className={css.header}>
 					<h1 className={css.formTitle}>Profile Page</h1>
-					{/* <a src="" className={css.editProfileButton}>
+					<Link href="/profile/edit" className={css.editProfileButton}>
 						Edit Profile
-					</a> */}
+					</Link>
 				</div>
 				<div className={css.avatarWrapper}>
-					<Image
-						src="Avatar"
+					{/* <Image
+						src={}
 						alt="User Avatar"
 						width={120}
 						height={120}
 						className={css.avatar}
-					/>
+					/> */}
 				</div>
 				<div className={css.profileInfo}>
 					<p>
@@ -30,7 +31,7 @@ const Profile = () => {
 				</div>
 			</div>
 		</main>
-)
+	)
 };
 
 export default Profile;
