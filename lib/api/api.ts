@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const nextServer = axios.create({
-  baseURL: 'https://notehub-api.goit.study/',
+  baseURL: 'https://notehub-public.goit.study/api',
   // withCredentials: true, // дозволяє axios працювати з cookie
 });
 
