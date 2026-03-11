@@ -29,7 +29,6 @@ export async function fetchNotes({currentPage, searchText}: FetchNotesParams): P
 			perPage: 12
 		},
 		headers: {
-			Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
 			Cookie: cookieStore.toString(),
 		}
 	});
@@ -41,7 +40,6 @@ export async function fetchNoteById({currentId}: FetchNoteParams): Promise<Note>
 
 	const response = await nextServer.get<Note>(`/notes/${currentId}`, {
 		headers: {
-			Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
 			Cookie: cookieStore.toString(),
 		}
 	});

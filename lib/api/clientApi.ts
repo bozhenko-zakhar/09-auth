@@ -47,6 +47,11 @@ type CheckSessionRequest = {
   success: boolean;
 };
 
+type updateUserProfileRequest = {
+  email: string;
+  username: string;
+}
+
 export async function fetchNotes({currentPage, searchText}: FetchNotesParams): Promise<FetchNotesResponse> {
 	const response = await nextServer.get<FetchNotesResponse>("/notes", {
 		params: {
@@ -125,8 +130,9 @@ export const login = async (data: LoginRequest): Promise<User> => {
 };
 
 export const logout = async (): Promise<void> => {
-  await nextServer.post('/auth/logout')
-};
+  await nextServer.post('/auth/logout');
+	return;
+}
 
 export const checkSession = async (): Promise<CheckSessionRequest> => {
   const res = await nextServer.get<CheckSessionRequest>('/auth/session');
@@ -137,3 +143,8 @@ export const getMe = async (): Promise<User> => {
   const { data } = await nextServer.get<User>('/users/me');
   return data;
 };
+
+export const updateUserProfile = async (newData: updateUserProfileRequest): Promise<User> => {
+	const { data } = await nextServer.patch('/users/me', newData);
+	return data;
+}
