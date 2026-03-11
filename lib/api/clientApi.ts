@@ -48,8 +48,8 @@ type CheckSessionRequest = {
 };
 
 type updateUserProfileRequest = {
-  email: string;
   username: string;
+  // email: string;
 }
 
 export async function fetchNotes({currentPage, searchText}: FetchNotesParams): Promise<FetchNotesResponse> {
@@ -144,7 +144,7 @@ export const getMe = async (): Promise<User> => {
   return data;
 };
 
-export const updateUserProfile = async (newData: updateUserProfileRequest): Promise<User> => {
-	const { data } = await nextServer.patch('/users/me', newData);
+export const updateUserProfile = async ({username}: updateUserProfileRequest): Promise<User> => {
+	const { data } = await nextServer.patch('/users/me', username);
 	return data;
 }
