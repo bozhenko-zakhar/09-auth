@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import { nextServer } from './api';
 import { User } from '@/types/user';
-import { Note } from '@/types/note';
+import { Note, NoteTag } from '@/types/note';
 
 interface FetchNotesResponse {
 	notes: Note[];
@@ -17,17 +17,25 @@ interface FetchNoteParams {
 interface FetchNotesParams {
 	currentPage: number;
 	searchText: string;
+	noteTag?: NoteTag
 }
 
-export async function fetchNotes({currentPage, searchText}: FetchNotesParams): Promise<FetchNotesResponse> {
+export async function fetchNotes({currentPage, searchText, noteTag}: FetchNotesParams): Promise<FetchNotesResponse> {
   const cookieStore = await cookies();
 
+	const queryParams = !noteTag ? {
+		search: searchText || "",
+		page: currentPage,
+		perPage: 12
+	} : {
+		search: searchText || "",
+		tag: noteTag,
+		page: currentPage,
+		perPage: 12
+	}
+
 	const response = await nextServer.get<FetchNotesResponse>("/notes", {
-		params: {
-			search: searchText || "",
-			page: currentPage,
-			perPage: 12
-		},
+		params: queryParams,
 		headers: {
 			Cookie: cookieStore.toString(),
 		}

@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { parse } from 'cookie';
+import setCookie from 'set-cookie-parser';
 import { checkServerSession } from './lib/api/serverApi';
 
 const privateRoutes = ['/notes', '/profile'];
@@ -22,20 +22,26 @@ export async function proxy(request: NextRequest) {
       // Якщо accessToken відсутній, але є refreshToken — потрібно перевірити сесію навіть для публічного маршруту,
       // адже сесія може залишатися активною, і тоді потрібно заборонити доступ до публічного маршруту.
       const data = await checkServerSession();
-      const setCookie = data.headers['set-cookie'];
+      const setHeaderCookie = data.headers['set-cookie'];
 
-      if (setCookie) {
-        const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
-        for (const cookieStr of cookieArray) {
-          const parsed = parse(cookieStr);
-          const options = {
-            expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
-            path: parsed.Path,
-            maxAge: Number(parsed['Max-Age']),
-          };
-          if (parsed.accessToken) cookieStore.set('accessToken', parsed.accessToken, options);
-          if (parsed.refreshToken) cookieStore.set('refreshToken', parsed.refreshToken, options);
-        }
+      if (setHeaderCookie) {
+				const parsedCookies = setCookie.parse(setHeaderCookie);
+
+				for (const cookie of parsedCookies) {
+					const options = {
+						expires: cookie.expires,
+						path: cookie.path,
+						maxAge: cookie.maxAge,
+					};
+
+					if (cookie.name === 'accessToken') {
+						cookieStore.set('accessToken', cookie.value, options);
+					}
+
+					if (cookie.name === 'refreshToken') {
+						cookieStore.set('refreshToken', cookie.value, options);
+					}
+				}
         // Якщо сесія все ще активна:
         // для публічного маршруту — виконуємо редірект на головну.
         if (isPublicRoute) {

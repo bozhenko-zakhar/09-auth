@@ -14,12 +14,7 @@ interface FetchNoteParams {
 interface FetchNotesParams {
 	currentPage: number;
 	searchText: string;
-}
-
-interface FetchNotesByCategoryParams {
-	currentPage: number;
-	searchText: string;
-	noteTag: NoteTag
+	noteTag?: NoteTag
 }
 
 interface CreateNoteParams {
@@ -35,7 +30,6 @@ interface DeleteNoteParams {
 export type RegisterRequest = {
   email: string;
   password: string;
-  username: string;
 };
 
 export type LoginRequest = {
@@ -51,26 +45,20 @@ type updateUserProfileRequest = {
   username: string;
 }
 
-export async function fetchNotes({currentPage, searchText}: FetchNotesParams): Promise<FetchNotesResponse> {
-	const response = await nextServer.get<FetchNotesResponse>("/notes", {
-		params: {
-			search: searchText || "",
-			page: currentPage,
-			perPage: 12
-		}
-	});
+export async function fetchNotes({currentPage, searchText, noteTag}: FetchNotesParams): Promise<FetchNotesResponse> {
+	const queryParams = !noteTag ? {
+		search: searchText || "",
+		page: currentPage,
+		perPage: 12
+	} : {
+		search: searchText || "",
+		tag: noteTag,
+		page: currentPage,
+		perPage: 12
+	}
 
-	return response.data;
-}
-
-export async function fetchNotesByCategory({currentPage, searchText, noteTag}: FetchNotesByCategoryParams): Promise<FetchNotesResponse> {
 	const response = await nextServer.get<FetchNotesResponse>("/notes", {
-		params: {
-			search: searchText || "",
-			tag: noteTag,
-			page: currentPage,
-			perPage: 12
-		}
+		params: queryParams
 	});
 
 	return response.data;
@@ -115,9 +103,9 @@ export const logout = async (): Promise<void> => {
 	return;
 }
 
-export const checkSession = async (): Promise<CheckSessionRequest> => {
+export const checkSession = async (): Promise<boolean> => {
   const res = await nextServer.get<CheckSessionRequest>('/auth/session');
-  return res.data;
+  return res.data.success;
 };
 
 export const getMe = async (): Promise<User> => {

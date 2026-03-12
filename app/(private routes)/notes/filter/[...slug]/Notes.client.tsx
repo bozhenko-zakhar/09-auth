@@ -12,7 +12,7 @@ import Loader from '@/components/Loader/Loader';
 import css from "./Notes.client.module.css"
 
 import { Toaster } from 'react-hot-toast';
-import { fetchNotes, fetchNotesByCategory } from '@/lib/api/clientApi';
+import { fetchNotes } from '@/lib/api/clientApi';
 import { NoteTag } from '@/types/note';
 import Link from 'next/link';
 
@@ -27,7 +27,7 @@ const NotesClient = ({tag}: NotesClientProps) => {
 
 	const { data, isLoading, isSuccess, isFetched } = useQuery({
 		queryKey: ['notes', debouncedQuery, currentPage, tag],
-		queryFn: () => tag === undefined ? fetchNotes({searchText: debouncedQuery, currentPage: currentPage}) : fetchNotesByCategory({searchText: debouncedQuery, currentPage: currentPage, noteTag: tag}),
+		queryFn: () => fetchNotes({searchText: debouncedQuery, currentPage: currentPage, noteTag: tag}),
 		placeholderData: keepPreviousData,
 		refetchOnMount: false,
 	});

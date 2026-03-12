@@ -1,6 +1,6 @@
 "use client"
 
-import { useId } from 'react'
+import { useId, useState } from 'react'
 // import * as Yup from "yup"
 import css from './NoteForm.module.css'
 // import {Formik, Form, Field, ErrorMessage, type FormikHelpers} from "formik"
@@ -12,6 +12,10 @@ import { useRouter } from 'next/navigation'
 import { useDraftStore } from '@/lib/store/noteStore'
 
 export default function NoteForm() {
+	const [title, setTitle] = useState();
+	const [content, setContent] = useState();
+	const [tag, setTag] = useState<NoteTag>();
+
 	const fieldId = useId();
 	const queryClient = useQueryClient();
 	const router = useRouter();
@@ -38,18 +42,6 @@ export default function NoteForm() {
 			toast.error(`${error}`);
 		}
 	});
-
-	// const NoteFormSchema = Yup.object().shape({
-	// 	title: Yup.string()
-	// 		.required("title is required")
-	// 		.min(3)
-	// 		.max(50),
-	// 	content: Yup.string()
-	// 		.max(500),
-	// 	tag: Yup.string()
-	// 		.required("tag is required")
-	// 		.matches(/(Todo|Work|Personal|Meeting|Shopping)/)
-	// })
 
 	function handleChange(event: React.ChangeEvent<
 		HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -79,6 +71,7 @@ export default function NoteForm() {
 					onChange={handleChange}
 					className={css.input}
 					defaultValue={draft.title}
+					value={draft.title}
 					type="text"
 					name="title"
 					id={`${fieldId}-title`}
@@ -93,6 +86,7 @@ export default function NoteForm() {
 					onChange={handleChange}
 					className={css.textarea}
 					defaultValue={draft.content}
+					value={draft.content}
 					id={`${fieldId}-content`}
 					name="content"
 					rows={8}
@@ -106,6 +100,7 @@ export default function NoteForm() {
 				 	onChange={handleChange}
 					className={css.select}
 					defaultValue={draft.tag}
+					value={draft.tag}
 					id={`${fieldId}-tag`}
 					name="tag"
 				>
