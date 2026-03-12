@@ -126,6 +126,6 @@ export const getMe = async (): Promise<User> => {
 };
 
 export const updateUserProfile = async (userData: updateUserProfileRequest): Promise<User> => {
-	const res = await nextServer.patch('/users/me', userData);
+	const res = await nextServer.patch<User>('/users/me', userData);
 	return res.data;
 }

@@ -10,14 +10,14 @@ import { getMe, updateUserProfile } from "@/lib/api/clientApi";
 const EditProfile = () => {
 	const router = useRouter();
 	const user = useAuthStore((state) => state.user)
-	const serUser = useAuthStore((state) => state.setUser)
+	const setUser = useAuthStore((state) => state.setUser)
 	const [userName, setUserName] = useState("");
 
 	useEffect(() => {
     getMe().then((user) => {
       setUserName(user.username ?? '');
     });
-  }, [setUserName]);
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(event.target.value);
@@ -27,7 +27,7 @@ const EditProfile = () => {
     event.preventDefault();
     try {
       const newUser = await updateUserProfile({ username: userName });
-			serUser(newUser);
+			setUser(newUser);
 			router.push("/profile")
     } catch (error) {
       console.error('Oops, some error:', error);
@@ -41,7 +41,7 @@ const EditProfile = () => {
 
 				<Image
 					src={user?.avatar ?? "/avatar.placeholder.png"}
-					alt={`User profile preview: ${user?.avatar}`}
+					alt={`${user?.username}'s profile preview image`}
 					width={120}
 					height={120}
 					className={css.avatar}
