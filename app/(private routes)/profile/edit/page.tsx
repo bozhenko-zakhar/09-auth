@@ -10,6 +10,7 @@ import { getMe, updateUserProfile } from "@/lib/api/clientApi";
 const EditProfile = () => {
 	const router = useRouter();
 	const user = useAuthStore((state) => state.user)
+	const serUser = useAuthStore((state) => state.setUser)
 	const [userName, setUserName] = useState("");
 
 	useEffect(() => {
@@ -25,7 +26,9 @@ const EditProfile = () => {
   const handleSaveUser = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await updateUserProfile({ username: userName });
+      const newUser = await updateUserProfile({ username: userName });
+			serUser(newUser);
+			router.push("/profile")
     } catch (error) {
       console.error('Oops, some error:', error);
     }
@@ -49,13 +52,24 @@ const EditProfile = () => {
 						<label htmlFor="username">Username:</label>
 						<input
 							onChange={handleChange}
+							value={userName}
 							id="username"
 							type="text"
 							className={css.input}
 						/>
 					</div>
 
-					<p>Email: {user?.email}</p>
+					
+					<div className={css.usernameWrapper}>
+						<label htmlFor="username">Email:</label>
+						<input
+							disabled
+							value={user?.email}
+							id="email"
+							type="email"
+							className={css.input}
+						/>
+					</div>
 
 					<div className={css.actions}>
 						<button type="submit" className={css.saveButton}>

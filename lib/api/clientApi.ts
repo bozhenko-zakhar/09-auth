@@ -24,7 +24,7 @@ interface FetchNotesByCategoryParams {
 
 interface CreateNoteParams {
 	title: string;
-	content: string | null;
+	content: string;
 	tag: NoteTag
 }
 
@@ -49,7 +49,6 @@ type CheckSessionRequest = {
 
 type updateUserProfileRequest = {
   username: string;
-  // email: string;
 }
 
 export async function fetchNotes({currentPage, searchText}: FetchNotesParams): Promise<FetchNotesResponse> {
@@ -58,9 +57,6 @@ export async function fetchNotes({currentPage, searchText}: FetchNotesParams): P
 			search: searchText || "",
 			page: currentPage,
 			perPage: 12
-		},
-		headers: {
-			Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`
 		}
 	});
 
@@ -74,9 +70,6 @@ export async function fetchNotesByCategory({currentPage, searchText, noteTag}: F
 			tag: noteTag,
 			page: currentPage,
 			perPage: 12
-		},
-		headers: {
-			Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`
 		}
 	});
 
@@ -84,37 +77,25 @@ export async function fetchNotesByCategory({currentPage, searchText, noteTag}: F
 }
 
 export async function fetchNoteById({currentId}: FetchNoteParams): Promise<Note> {
-	const response = await nextServer.get<Note>(`/notes/${currentId}`, {
-		headers: {
-			Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`
-		}
-	});
+	const response = await nextServer.get<Note>(`/notes/${currentId}`);
 
 	return response.data;
 }
 
 export async function createNote({title, content, tag}: CreateNoteParams): Promise<Note> {
-	const newNoteL: CreateNoteParams = {
+	const newNote: CreateNoteParams = {
 		title: title,
-		content: content,
+		content: content ?? "",
 		tag: tag
 	}
 
-	const response = await nextServer.post<Note>("/notes", newNoteL, {
-		headers: {
-			Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`
-		}
-	});
+	const response = await nextServer.post<Note>("/notes", newNote);
 
 	return response.data
 }
 
 export async function deleteNote({currentId}: DeleteNoteParams): Promise<Note> {
-	const response = await nextServer.delete<Note>(`/notes/${currentId}`, {
-		headers: {
-			Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`
-		}
-	});
+	const response = await nextServer.delete<Note>(`/notes/${currentId}`);
 
 	return response.data
 }
@@ -144,7 +125,7 @@ export const getMe = async (): Promise<User> => {
   return data;
 };
 
-export const updateUserProfile = async ({username}: updateUserProfileRequest): Promise<User> => {
-	const { data } = await nextServer.patch('/users/me', username);
-	return data;
+export const updateUserProfile = async (userData: updateUserProfileRequest): Promise<User> => {
+	const res = await nextServer.patch('/users/me', userData);
+	return res.data;
 }
