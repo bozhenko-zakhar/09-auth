@@ -33,7 +33,7 @@ export default function NoteForm() {
 		},
 		onSuccess: () => {
 			clearDraft();
-			queryClient.invalidateQueries({ queryKey: ['notes', "", 1, undefined] });
+			queryClient.invalidateQueries({ queryKey: ['notes'] });
 			router.push("/notes/filter/all");
 		
 			toast.success("Your note was successfuly created");
@@ -59,8 +59,6 @@ export default function NoteForm() {
 			content: values.content as string,
 			tag: values.tag as NoteTag
 		});
-
-		
 	}
 
   return (
@@ -70,7 +68,6 @@ export default function NoteForm() {
 				<input
 					onChange={handleChange}
 					className={css.input}
-					defaultValue={draft.title}
 					value={draft.title}
 					type="text"
 					name="title"
@@ -85,7 +82,6 @@ export default function NoteForm() {
 				<textarea
 					onChange={handleChange}
 					className={css.textarea}
-					defaultValue={draft.content}
 					value={draft.content}
 					id={`${fieldId}-content`}
 					name="content"
@@ -99,7 +95,6 @@ export default function NoteForm() {
 				<select
 				 	onChange={handleChange}
 					className={css.select}
-					defaultValue={draft.tag}
 					value={draft.tag}
 					id={`${fieldId}-tag`}
 					name="tag"
